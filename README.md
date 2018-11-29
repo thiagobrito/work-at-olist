@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/thiagobrito/work-at-olist/tree/master.svg?style=svg)](https://circleci.com/gh/thiagobrito/work-at-olist/tree/master)
+
 # Work at Olist
 
 [Olist](https://olist.com/) is a company that offers an integration platform
@@ -218,7 +220,7 @@ The following phone calls have been made from the number 99 98852 6423 to 99 334
 # Todo list
 
 - [x] Create first structure of project (1)
-- [ ] Setup Continous Integration using CircleCI (2)
+- [x] Setup Continous Integration using CircleCI (2)
 - [x] Setup Django Rest Framework (1)
 - [ ] Receive telephone call detail reports through Rest API (5) 
 - [ ] Get telephone bill through Rest API (3)

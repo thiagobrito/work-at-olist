@@ -213,3 +213,15 @@ The following phone calls have been made from the number 99 98852 6423 to 99 334
 * Be careful with REST API details. They can bite you!
 
 **Have fun!**
+
+
+# Todo list
+
+- [x] Create first structure of project (1)
+- [ ] Setup Continous Integration using CircleCI (2)
+- [x] Setup Django Rest Framework (1)
+- [ ] Receive telephone call detail reports through Rest API (5) 
+- [ ] Get telephone bill through Rest API (3)
+- [ ] Publish at heroku (2)
+- [ ] Fill database with sample data (1)
+- [ ] Finish documentation (2)

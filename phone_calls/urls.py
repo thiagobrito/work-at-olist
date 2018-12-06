@@ -24,7 +24,7 @@ import phone_calls.core.views
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'phone', phone_calls.core.views.PhoneRecordViewSet)
+router.register(r'phone', phone_calls.core.views.PhoneRecordViewSet, 'phone')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

@@ -8,14 +8,14 @@ from phone_calls.core.models import PhoneRecord
 
 class TestApiPhoneRecord(APITestCase):
     def test_insert_valid_data(self):
-        response = self.client.post(reverse('phone-list'), self.make_test_data(), format='json')
+        response = self.client.post(reverse('phone_record-list'), self.make_test_data(), format='json')
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(1, PhoneRecord.objects.count())
         self.assertEqual(234, PhoneRecord.objects.get().id)
 
     def test_insert_invalid_phone_number(self):
         data = self.make_test_data(source='aaa', destination='bbb')
-        response = self.client.post(reverse('phone-list'), data, format='json')
+        response = self.client.post(reverse('phone_record-list'), data, format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(0, PhoneRecord.objects.count())
         self.assertIn('source', response.data)

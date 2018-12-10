@@ -1,6 +1,6 @@
 from phone_calls.core.models import PhoneRecord
 
-_phone_call_id = 0
+_phone_call_id = 1
 
 
 def make_timestamp(**kwargs):

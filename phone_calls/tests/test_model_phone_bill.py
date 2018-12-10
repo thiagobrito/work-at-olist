@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from phone_calls.core.models import PhoneBill
@@ -127,3 +128,9 @@ class PhoneBillFromPhoneCallTests(TestCase):
         create_phone_call(make_timestamp(hour=1, minute=0, second=0, day=6), type='end')
         self.assertTrue(PhoneBill.objects.exists())
         self.assertEqual(346.14, PhoneBill.objects.get().price)
+
+    def test_start_call_after_end_call(self):
+        '''Well, something wrong happens! We have a start phone call that happened after the end! We ignore this in the phone bill.'''
+        create_phone_call(make_timestamp(hour=22, minute=57, second=13))
+        create_phone_call(make_timestamp(hour=20, minute=0, second=0), type='end')
+        self.assertFalse(PhoneBill.objects.exists())

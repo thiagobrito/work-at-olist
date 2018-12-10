@@ -2,11 +2,11 @@ from datetime import timedelta
 
 from django.db import models
 
-from phone_calls.core.validators import phone_number_validator
+from phone_calls.core.validators import phone_number_validator, price_validator
 
 
 class PhoneRecord(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     type = models.CharField('type', max_length=12)
     time_stamp = models.DateTimeField()
     call_id = models.IntegerField()
@@ -32,11 +32,11 @@ class PhoneRecord(models.Model):
 
 
 class PhoneBill(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     destination = models.CharField(max_length=12, validators=[phone_number_validator])
     start_time_stamp = models.DateTimeField()
     duration = models.PositiveIntegerField()
-    price = models.FloatField()
+    price = models.FloatField(validators=[price_validator])
 
     _standing_charge = 0.36
     _call_minute_charge = 0.09
@@ -44,7 +44,9 @@ class PhoneBill(models.Model):
     def calculate_and_save(self, call_data):
         data = {'destination': call_data['start'].destination, 'start_time_stamp': call_data['start'].time_stamp,
                 'duration': self._calculate_duration(call_data), 'price': self._calculate_price(call_data)}
-        return PhoneBill.objects.create(**data)
+
+        if data['price'] > 0:
+            return PhoneBill.objects.create(**data)
 
     def _calculate_duration(self, call_data):
         return (call_data['end'].time_stamp - call_data['start'].time_stamp).total_seconds()

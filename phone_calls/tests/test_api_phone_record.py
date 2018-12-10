@@ -11,7 +11,7 @@ class TestApiPhoneRecord(APITestCase):
         response = self.client.post(reverse('phone_record-list'), self.make_test_data(), format='json')
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(1, PhoneRecord.objects.count())
-        self.assertEqual(234, PhoneRecord.objects.get().id)
+        self.assertEqual(1, PhoneRecord.objects.get().id)
 
     def test_insert_invalid_phone_number(self):
         data = self.make_test_data(source='aaa', destination='bbb')
@@ -22,7 +22,7 @@ class TestApiPhoneRecord(APITestCase):
         self.assertIn('destination', response.data)
 
     def make_test_data(self, **kwargs):
-        data = {'id': 234, 'type': 'start', 'time_stamp': '2016-02-29T12:00:00Z',
+        data = {'type': 'start', 'time_stamp': '2016-02-29T12:00:00Z',
                 'call_id': 70, 'source': '5512345678', 'destination': '44123456789'}
         data.update(kwargs)
         return data

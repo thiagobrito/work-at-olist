@@ -1,18 +1,14 @@
-import locale
 import time
-from datetime import datetime
 
+from currencies import Currency
 from rest_framework import serializers
 
 
 # Expected format: R$ 01,36
-from rest_framework.fields import DateTimeField
-
-
 class MoneyBrlField(serializers.Field):
     def to_representation(self, price):
-        locale.setlocale(locale.LC_ALL, '')
-        return locale.currency(price)
+        currency = Currency('BRL')
+        return currency.get_money_format(price)
 
     def to_internal_value(self, price):
         return price

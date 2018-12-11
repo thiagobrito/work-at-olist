@@ -50,6 +50,8 @@ jobs:
             . venv/bin/activate
             python manage.py test
 
+      - store_test_results:
+          path: test-results
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: test-results
+          destination: tr1

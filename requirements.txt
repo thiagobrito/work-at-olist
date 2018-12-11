@@ -2,3 +2,5 @@ currencies==2014.7.13
 Django==2.1.3
 djangorestframework==3.9.0
 pytz==2018.7
+six==1.12.0
+unittest-xml-reporting==2.2.0

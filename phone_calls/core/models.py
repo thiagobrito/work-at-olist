@@ -51,3 +51,7 @@ class PhoneBill(models.Model):
 
     def _calculate_price(self, call_data):
         return self.__phone_call_price_calculator.calculate(call_data)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

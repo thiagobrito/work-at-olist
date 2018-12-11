@@ -1,18 +1,7 @@
-from rest_framework import serializers, viewsets
+from rest_framework import viewsets
 
 from phone_calls.core.models import *
-
-
-class PhoneRecordSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = PhoneRecord
-        fields = ('id', 'type', 'time_stamp', 'call_id', 'source', 'destination')
-
-
-class PhoneBillSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = PhoneBill
-        fields = ('id', 'destination', 'start_time_stamp', 'duration', 'price')
+from phone_calls.core.serializers import PhoneRecordSerializer, PhoneBillSerializer
 
 
 class PhoneRecordViewSet(viewsets.ModelViewSet):

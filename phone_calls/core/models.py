@@ -36,6 +36,7 @@ class PhoneBill(models.Model):
     start_time_stamp = models.DateTimeField()
     duration = models.PositiveIntegerField()
     price = models.FloatField(validators=[price_validator])
+
     __phone_call_price_calculator = PhoneCallPriceCalculator()
 
     def calculate_and_save(self, call_data):

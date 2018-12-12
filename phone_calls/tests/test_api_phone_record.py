@@ -18,8 +18,6 @@ class TestApiPhoneRecord(APITestCase):
         response = self.client.post(reverse('phone_record-list'), data, format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(0, PhoneRecord.objects.count())
-        self.assertIn('source', response.data)
-        self.assertIn('destination', response.data)
 
     def make_test_data(self, **kwargs):
         data = {'type': 'start', 'time_stamp': '2016-02-29T12:00:00Z',

@@ -5,10 +5,12 @@ class PhoneCallPriceCalculator:
     _standing_charge = 0.36
     _call_minute_charge = 0.09
 
-    def calculate(self, call_data):
-        return self._standing_charge + \
-               (self._calculate_payable_minutes(call_data['start'].time_stamp, call_data['end'].time_stamp) *
-                self._call_minute_charge)
+    @classmethod
+    def calculate(cls, call_data):
+        instance = cls()
+        return instance._standing_charge + \
+               (instance._calculate_payable_minutes(call_data['start'].time_stamp, call_data['end'].time_stamp) *
+                instance._call_minute_charge)
 
     def _calculate_payable_minutes(self, start_date_time, end_date_time):
         payable_minutes = 0

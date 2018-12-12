@@ -14,12 +14,6 @@ class TestServicePhoneBilling(APITestCase):
         self.assertEqual(1, PhoneBill.objects.count())
         self.assertEqual(1, PhoneBill.objects.get().id)
 
-    def test_call_just_one_hour_normal_time(self):
-        make_phone_call(self.client, time_stamp=make_timestamp(hour=9), type='start')
-        make_phone_call(self.client, time_stamp=make_timestamp(hour=10), type='end')
-        self.assertTrue(PhoneBill.objects.exists())
-        self.assertEqual(5.76, PhoneBill.objects.get().price)
-
     def test_usual_flow_save_bill(self):
         '''Phone call started and some minutes latter. Make sure that the billing is correct'''
         make_phone_call(self.client, time_stamp=make_timestamp(hour=11), type='start')
@@ -145,6 +139,11 @@ class TestServicePhoneBilling(APITestCase):
         '''Well, something wrong happens! We have a start phone call that happened after the end! We ignore this in the phone bill.'''
         make_phone_call(self.client, make_timestamp(hour=22, minute=57, second=13))
         make_phone_call(self.client, make_timestamp(hour=20, minute=0, second=0), type='end')
+        self.assertFalse(PhoneBill.objects.exists())
+
+    def test_invalid_timestamp(self):
+        '''Well someone inserted a crazy timestamp. We need to identify it and return 400'''
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, make_phone_call(self.client, 'invalid').status_code)
         self.assertFalse(PhoneBill.objects.exists())
 
     def make_test_data(self, **kwargs):

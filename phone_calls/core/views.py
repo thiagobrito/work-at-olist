@@ -26,6 +26,9 @@ class PhoneRecordViewSet(viewsets.ViewSet):
         except InvalidInputsError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class PhoneBillingViewSet(viewsets.ModelViewSet):
     queryset = PhoneBill.objects.all()

@@ -5,17 +5,13 @@ from phone_calls.core.price import *
 
 class CreateBilling(Service):
     def process(self):
-        call = PhoneRecord.objects.create(**self.cleaned_data)
+        call = Call.objects.create(**self.cleaned_data)
         self._save_billing_report(call)
         return call
 
-    def clean(self):
-        phone_number_validator(self.cleaned_data['source'])
-        phone_number_validator(self.cleaned_data['destination'])
-
     def _save_billing_report(self, call):
         pair_type = 'end' if call.type == 'start' else 'start'
-        pair_call = PhoneRecord.objects.filter(call_id=self.cleaned_data['call_id'], type=pair_type)
+        pair_call = Call.objects.filter(call_id=self.cleaned_data['call_id'], type=pair_type)
 
         # Verify if we have both start and end calls inside database
         if not pair_call.exists():
@@ -25,11 +21,11 @@ class CreateBilling(Service):
         call_period = Period(pair_call_objects['start'].time_stamp, pair_call_objects['end'].time_stamp)
         price = PhoneCallPriceCalculator.calculate(call_period)
 
-        # If price is negative, we assume that invalid data was inserted and don't create the bill for this call
+        # If price is negative, we assume that an invalid data was inserted and don't create the bill for this call
         if price < 0:
             return
 
-        return PhoneBill.objects.create(
+        return Billing.objects.create(
             destination=pair_call_objects['start'].destination,
             start_time_stamp=call_period.start,
             duration=call_period.seconds_diff(),

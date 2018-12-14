@@ -17,8 +17,3 @@ def phone_number_validator(value):
 
     if len(value) != 10 and len(value) != 11:
         raise ValidationError(message, code=code)
-
-
-def price_validator(value):
-    if value < 0:
-        raise ValidationError('Price is negative. Probably the start call is marked after end call', code='value')

@@ -4,14 +4,14 @@ from phone_calls.core.period import Period
 
 
 class PhoneCallPriceCalculator:
-    _standing_charge = 0.36
-    _call_minute_charge = 0.09
+    standing_charge = 0.36
+    call_minute_charge = 0.09
 
     @classmethod
     def calculate(cls, call_period):
         instance = cls()
-        return instance._standing_charge + \
-               (instance._calculate_payable_minutes(call_period) * instance._call_minute_charge)
+        return instance.standing_charge + \
+               (instance._calculate_payable_minutes(call_period) * instance.call_minute_charge)
 
     def _calculate_payable_minutes(self, call_period):
         # We only pay for full minutes. If it's less than one minute call it won't have the minutes charged

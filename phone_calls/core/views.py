@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from phone_calls.core.forms import BillingForm
 from phone_calls.core.models import *
 from phone_calls.core.serializers import PhoneBillSerializer
-from phone_calls.core.services import InvalidInputsError
 from phone_calls.core.services.billing import CreateBilling
 
 
@@ -30,13 +29,10 @@ class PhoneRecordViewSet(viewsets.ViewSet):
 
             return Response(status=status.HTTP_201_CREATED)
 
-        except InvalidInputsError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class PhoneBillingViewSet(viewsets.ModelViewSet):
-    queryset = PhoneBill.objects.all()
+    queryset = Billing.objects.all()
     serializer_class = PhoneBillSerializer

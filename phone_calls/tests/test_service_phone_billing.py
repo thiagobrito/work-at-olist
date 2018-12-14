@@ -28,7 +28,7 @@ class TestServicePhoneBilling(APITestCase):
         self.assertEqual(0.36, PhoneBill.objects.get().price)
 
     def test_only_free_minutes_call_charge_just_for_standing_charge(self):
-        '''We have a call with just one hour inside payable hours'''
+        '''We have the full call inside free time'''
         make_phone_call(self.client, make_timestamp(hour=23, minute=0, second=13, day=1))
         make_phone_call(self.client, make_timestamp(hour=5, minute=1, second=0, day=2), type='end')
         self.assertTrue(PhoneBill.objects.exists())

@@ -1,11 +1,12 @@
+from decimal import *
 from datetime import timedelta
 
 from phone_calls.core.period import Period
 
 
 class PhoneCallPriceCalculator:
-    standing_charge = 0.36
-    call_minute_charge = 0.09
+    standing_charge = Decimal(0.36)
+    call_minute_charge = Decimal(0.09)
 
     @classmethod
     def calculate(cls, call_period):

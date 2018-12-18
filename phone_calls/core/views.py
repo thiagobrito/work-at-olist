@@ -1,4 +1,4 @@
-import datetime
+from datetime import timedelta, datetime
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -13,7 +13,7 @@ from phone_calls.core.services.billing import CreateBilling
 class PhoneRecordViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
-            time_stamp = datetime.datetime.strptime(request.data.get('time_stamp'), '%Y-%m-%dT%H:%M:%SZ')
+            time_stamp = datetime.strptime(request.data.get('time_stamp'), '%Y-%m-%dT%H:%M:%SZ')
             data = {
                 'type': request.data.get('type'),
                 'time_stamp': time_stamp,
@@ -36,16 +36,19 @@ class PhoneRecordViewSet(viewsets.ViewSet):
 
 class PhoneBillingViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'])
-    def report(self, request, *args, **kwargs):
+    def report(self, request):
         try:
             subscriber = request.data.get('subscriber', None)
+
             period = request.data.get('period', None)
-
-            queryset = Billing.objects.filter(subscriber=subscriber)
             if period:
-                d = datetime.datetime.strptime(period, '%m-%Y')
-                queryset = Billing.objects.filter(start_time_stamp__year=d.year, start_time_stamp__month=d.month)
+                d = datetime.strptime(period, '%m-%Y')
+            else:
+                # Period not informed, we'll use the last month
+                d = datetime.now().replace(day=1) - timedelta(days=1)
 
+            queryset = Billing.objects.filter(subscriber=subscriber,
+                                              start_time_stamp__year=d.year, start_time_stamp__month=d.month)
             serializer = PhoneBillSerializer(queryset, many=True)
             return Response(serializer.data)
 

@@ -1,11 +1,12 @@
 import datetime
 
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from phone_calls.core.forms import BillingForm
 from phone_calls.core.models import *
-from phone_calls.core.serializers import PhoneBillSerializer
+from phone_calls.core.serializers import PhoneBillSerializer, PhoneRecordSerializer
 from phone_calls.core.services.billing import CreateBilling
 
 
@@ -33,6 +34,20 @@ class PhoneRecordViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class PhoneBillingViewSet(viewsets.ModelViewSet):
-    queryset = Billing.objects.all()
-    serializer_class = PhoneBillSerializer
+class PhoneBillingViewSet(viewsets.GenericViewSet):
+    @action(detail=False, methods=['post'])
+    def report(self, request, *args, **kwargs):
+        try:
+            subscriber = request.data.get('subscriber', None)
+            period = request.data.get('period', None)
+
+            queryset = Billing.objects.filter(subscriber=subscriber)
+            if period:
+                d = datetime.datetime.strptime(period, '%m-%Y')
+                queryset = Billing.objects.filter(start_time_stamp__year=d.year, start_time_stamp__month=d.month)
+
+            serializer = PhoneBillSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

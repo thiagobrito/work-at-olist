@@ -26,7 +26,7 @@ class CreateBilling(Service):
             return
 
         return Billing.objects.create(
-            destination=pair_call_objects['start'].destination,
+            subscriber=pair_call_objects['start'].source,
             start_time_stamp=call_period.start,
             duration=call_period.seconds_diff(),
             price=price

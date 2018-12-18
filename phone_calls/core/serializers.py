@@ -17,4 +17,4 @@ class PhoneBillSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Billing
-        fields = ('id', 'destination', 'time_stamp', 'duration', 'price')
+        fields = ('id', 'subscriber', 'time_stamp', 'duration', 'price')

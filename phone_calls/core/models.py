@@ -14,7 +14,7 @@ class Call(models.Model):
 
 class Billing(models.Model):
     id = models.AutoField(primary_key=True)
-    destination = models.CharField(max_length=12, validators=[phone_number_validator])
+    subscriber = models.CharField(max_length=12, validators=[phone_number_validator])
     start_time_stamp = models.DateTimeField()
     duration = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)

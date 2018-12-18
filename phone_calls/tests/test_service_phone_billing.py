@@ -10,12 +10,6 @@ from phone_calls.tests.utils import make_timestamp, make_phone_call
 
 
 class TestServicePhoneBilling(APITestCase):
-    def test_insert_valid_data(self):
-        response = self.client.post(reverse('phone_billing-list'), self.make_test_data(), format='json')
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertEqual(1, Billing.objects.count())
-        self.assertEqual(1, Billing.objects.get().id)
-
     def test_usual_flow_save_bill(self):
         '''Phone call started and some minutes latter. Make sure that the billing is correct'''
         make_phone_call(self.client, time_stamp=make_timestamp(hour=11), type='start')

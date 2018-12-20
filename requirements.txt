@@ -9,3 +9,4 @@ unittest-xml-reporting==2.2.0
 git+https://github.com/jasperlittle/django-rest-framework-docs.git
 psycopg2-binary==2.7.5
 gunicorn==19.9.0
+dj-static==0.0.6

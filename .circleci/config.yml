@@ -10,7 +10,7 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.7.0
         environment:
-            SECRET_KEY: %n+t%lb+rc0ike#_4ri+!z#bnuge8tcx_sqrt=ox3^)lm=m-$%
+            SECRET_KEY: "%n+t%lb+rc0ike#_4ri+!z#bnuge8tcx_sqrt=ox3^)lm=m-$%"
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images

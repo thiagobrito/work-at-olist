@@ -4,3 +4,4 @@ djangorestframework==3.9.0
 pytz==2018.7
 six==1.12.0
 unittest-xml-reporting==2.2.0
+git+https://github.com/jasperlittle/django-rest-framework-docs.git

@@ -1,17 +1,26 @@
 from datetime import timedelta, datetime
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, parsers, renderers
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from phone_calls.core.forms import BillingForm
 from phone_calls.core.models import *
-from phone_calls.core.serializers import PhoneBillSerializer, PhoneRecordSerializer
+from phone_calls.core.serializers import PhoneBillSerializer, PhoneRecordSerializer, PhoneBillRequestSerializer, \
+    PhoneRecordRequestSerializer
 from phone_calls.core.services.billing import CreateBilling
 
 
 class PhoneRecordViewSet(viewsets.ViewSet):
+    """
+    Saves calling information in the database.
+    """
+
     def create(self, request):
+        """
+        Saves specific call information inside database.
+        """
         try:
             time_stamp = datetime.strptime(request.data.get('time_stamp'), '%Y-%m-%dT%H:%M:%SZ')
             data = {
@@ -26,19 +35,40 @@ class PhoneRecordViewSet(viewsets.ViewSet):
             if not billing_form.is_valid():
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
+            if data['type'] != 'start' and data['type'] != 'end':
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={'error': 'Call type is invalid.'})
+
+            queryset = Call.objects.filter(call_id=data['call_id'], type=data['type'])
+            if queryset.exists():
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={'error': 'ID and type already exists in database'})
+
             CreateBilling.execute(billing_form.cleaned_data)
 
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(data={'call_id': request.data.get('call_id')}, status=status.HTTP_201_CREATED)
 
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    def get_serializer_class(self):
+        return PhoneRecordRequestSerializer
 
-class PhoneBillingViewSet(viewsets.GenericViewSet):
-    @action(detail=False, methods=['post'])
-    def report(self, request):
+
+class PhoneBillingViewSet(viewsets.ViewSet):
+    """
+    Retreive billing report from a specific subscriber.
+    """
+
+    @action(detail=False, methods=['POST'], name='report')
+    def report(self, request, *args, **kwargs):
+        """
+        Returns all billing information from specific user at period range
+        """
         try:
             subscriber = request.data.get('subscriber', None)
+            if subscriber is None:
+                return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
             period = request.data.get('period', None)
             if period:
@@ -54,3 +84,6 @@ class PhoneBillingViewSet(viewsets.GenericViewSet):
 
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def get_serializer_class(self):
+        return PhoneBillRequestSerializer

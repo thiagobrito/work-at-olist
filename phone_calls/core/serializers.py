@@ -10,6 +10,12 @@ class PhoneRecordSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'type', 'time_stamp', 'call_id', 'source', 'destination')
 
 
+class PhoneRecordRequestSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Call
+        fields = ('type', 'time_stamp', 'call_id', 'source', 'destination')
+
+
 class PhoneBillSerializer(serializers.HyperlinkedModelSerializer):
     price = MoneyBrlField(label='Price')
     duration = DurationField(label='Duration')
@@ -18,3 +24,11 @@ class PhoneBillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Billing
         fields = ('id', 'subscriber', 'time_stamp', 'duration', 'price')
+
+
+class PhoneBillRequestSerializer(serializers.HyperlinkedModelSerializer):
+    time_stamp = serializers.CharField(required=False)
+
+    class Meta:
+        model = Billing
+        fields = ('subscriber', 'time_stamp')

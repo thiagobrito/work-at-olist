@@ -1,8 +1,6 @@
 from decimal import Decimal
 
-from django.core.exceptions import ValidationError
 from rest_framework import status
-from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from phone_calls.core.models import Billing
@@ -15,6 +13,28 @@ class TestServicePhoneBilling(APITestCase):
         make_phone_call(self.client, time_stamp=make_timestamp(hour=11), type='start')
         make_phone_call(self.client, time_stamp=make_timestamp(hour=12), type='end')
         self.assertTrue(Billing.objects.exists())
+
+    def test_double_start_call(self):
+        '''Phone call started and some minutes latter. Make sure that the billing is correct'''
+        make_phone_call(self.client, time_stamp=make_timestamp(hour=11), type='start')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST,
+                         make_phone_call(self.client, time_stamp=make_timestamp(hour=12), type='start').status_code)
+        make_phone_call(self.client, time_stamp=make_timestamp(hour=12), type='end')
+        self.assertTrue(Billing.objects.exists())
+
+    def test_double_end_call(self):
+        '''Phone call started and some minutes latter. Make sure that the billing is correct'''
+        make_phone_call(self.client, time_stamp=make_timestamp(hour=11), type='start')
+        make_phone_call(self.client, time_stamp=make_timestamp(hour=12), type='end')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST,
+                         make_phone_call(self.client, time_stamp=make_timestamp(hour=12), type='end').status_code)
+        self.assertTrue(Billing.objects.exists())
+
+    def test_invalid_type(self):
+        '''Phone call started and some minutes latter. Make sure that the billing is correct'''
+        self.assertEqual(status.HTTP_400_BAD_REQUEST,
+                         make_phone_call(self.client, time_stamp=make_timestamp(hour=11),
+                                         type='invalid.type').status_code)
 
     def test_call_fractionated_minute_dont_pay_minute_just_call(self):
         '''We have a call with just one hour inside payable hours'''
@@ -141,8 +161,3 @@ class TestServicePhoneBilling(APITestCase):
         '''Well someone inserted a crazy timestamp. We need to identify it and return 400'''
         self.assertEqual(status.HTTP_400_BAD_REQUEST, make_phone_call(self.client, 'invalid').status_code)
         self.assertFalse(Billing.objects.exists())
-
-    def make_test_data(self, **kwargs):
-        data = {'destination': '2433263689', 'time_stamp': '2016-02-29T12:00:00Z', 'duration': 60, 'price': 0.32}
-        data.update(kwargs)
-        return data

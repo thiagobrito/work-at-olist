@@ -31,6 +31,12 @@ class TestApiPhoneRecord(APITestCase):
             "price": "R$ 0.54"
         }, dict(response.data[0]))
 
+    def test_missing_subscriber_field_return_422_status_code(self):
+        request = APIRequestFactory().post('')
+        response = self.view(request)
+
+        self.assertEqual(status.HTTP_422_UNPROCESSABLE_ENTITY, response.status_code)
+
     def test_subscriber_not_found(self):
         request = APIRequestFactory().post('', data={'subscriber': 'not.found'})
         response = self.view(request)

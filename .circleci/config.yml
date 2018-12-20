@@ -11,6 +11,7 @@ jobs:
       - image: circleci/python:3.7.0
         environment:
             SECRET_KEY: "%n+t%lb+rc0ike#_4ri+!z#bnuge8tcx_sqrt=ox3^)lm=m-$%"
+            ALLOWED_HOSTS: "*"
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images

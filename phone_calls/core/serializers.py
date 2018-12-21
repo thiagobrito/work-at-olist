@@ -27,8 +27,8 @@ class PhoneBillSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PhoneBillRequestSerializer(serializers.HyperlinkedModelSerializer):
-    time_stamp = serializers.CharField(required=False)
+    period = serializers.CharField(required=False)
 
     class Meta:
         model = Billing
-        fields = ('subscriber', 'time_stamp')
+        fields = ('subscriber', 'period')

@@ -61,5 +61,5 @@ Django 2.0 from [this respository](https://github.com/jasperlittle/django-rest-f
 - [x] Get telephone bill through Rest API (3)
 - [ ] EXTRA: Provide an API to change the charge price and free period (2)
 - [x] Publish at heroku (2)
-- [ ] Fill database with sample data (1)
-- [ ] Finish documentation (2)
+- [x] Fill database with sample data (1)
+- [x] Finish documentation (2)

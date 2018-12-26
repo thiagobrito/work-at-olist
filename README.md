@@ -30,14 +30,14 @@ This repository contains a solved problem to evaluate the candidate skills.
    python manage.py test
    python manage.py runserver   
    ```
-5. Access local running locally at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+5. Access local server instance at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ## Implementation details
 
 This is a Django 2.1 application using Django Rest Framework 3.9 as backend. 
 
 At front-end, I used Django Rest Framework Docs that was migrated to run at 
-Django 2.0 from [this respository](https://github.com/jasperlittle/django-rest-framework-docs.git)   
+Django 2.1 from [this respository](https://github.com/jasperlittle/django-rest-framework-docs.git)   
 
 ### Project structure
 
